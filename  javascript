@@ -1,0 +1,64 @@
+// Variáveis iniciais
+let vida = 100;
+let forca = 50;
+let recursos = 30;
+
+function mostrarStatus() {
+  console.log(`Vida: ${vida}, Força: ${forca}, Recursos: ${recursos}`);
+}
+
+function enfrentarDesafio() {
+  const desafio = Math.floor(Math.random() * 3); // 0: Vida, 1: Força, 2: Recursos
+
+  switch (desafio) {
+    case 0:
+      const dano = Math.floor(Math.random() * 20) + 5; // Dano entre 5 e 25
+      console.log(`Você enfrentou um desafio que reduziu sua Vida em ${dano}!`);
+      vida -= dano;
+      break;
+    case 1:
+      const perdaForca = Math.floor(Math.random() * 10) + 3; // Perda de Força entre 3 e 12
+      console.log(`Você enfrentou um desafio que reduziu sua Força em ${perdaForca}!`);
+      forca -= perdaForca;
+      break;
+    case 2:
+      const perdaRecursos = Math.floor(Math.random() * 15) + 5; // Perda de Recursos entre 5 e 20
+      console.log(`Você enfrentou um desafio que reduziu seus Recursos em ${perdaRecursos}!`);
+      recursos -= perdaRecursos;
+      break;
+  }
+
+  // Exibe o status após o desafio
+  mostrarStatus();
+}
+
+function iniciarRodada() {
+  if (vida <= 0) {
+    console.log("Você morreu! Fim do jogo.");
+    return;
+  }
+
+  if (forca <= 0 || recursos <= 0) {
+    console.log("Você não tem força ou recursos suficientes para continuar. Fim do jogo.");
+    return;
+  }
+
+  console.log("Nova rodada!");
+  enfrentarDesafio();
+
+  // Condição para continuar ou finalizar o jogo
+  if (vida > 0) {
+    const continuar = prompt("Você quer continuar? (Sim/Não)").toLowerCase();
+    if (continuar === "sim") {
+      iniciarRodada();
+    } else {
+      console.log("Você decidiu abandonar a jornada. Fim do jogo.");
+    }
+  }
+}
+
+function start() {
+  console.log("Jogo iniciado! Prepare-se para a primeira rodada.");
+  mostrarStatus();
+  iniciarRodada();
+}
