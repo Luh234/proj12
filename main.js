@@ -1,18 +1,75 @@
-# Jogo de Rodadas
+class Personagem {
+  constructor(nome) {
+      this.nome = nome;
+      this.vida = 6; // 6 corações
+      this.forca = 1; // Força inicial
+      this.recursos = {
+          dinheiro: 0,
+          poções: 0,
+      };
+  }
 
-## Descrição do Jogo
-Este é um jogo de rodadas onde o jogador assume o papel de um personagem que deve enfrentar desafios ao longo de várias rodadas. Cada desafio pode alterar características do personagem, como Vida, Força e Recursos. O objetivo é sobreviver até o final das rodadas, mantendo a Vida positiva.
+  mostrarStatus() {
+      console.log(`Status de ${this.nome}:`);
+      console.log(`Vida: ${this.vida} corações`);
+      console.log(`Força: ${this.forca}`);
+      console.log(`Dinheiro: ${this.recursos.dinheiro}`);
+      console.log(`Poções: ${this.recursos.poções}`);
+  }
 
-## Regras
-1. O jogo começa com a personagem com valores iniciais de Vida, Força e Recursos.
-2. A cada rodada, a personagem enfrentará um desafio que pode alterar suas características.
-3. O jogo termina quando a personagem morre (Vida = 0) ou alcança o final com Vida positiva.
-4. O jogador precisa usar o console do navegador para interagir com o jogo.
+  enfrentarDesafio() {
+      const desafio = Math.random();
+      if (desafio < 0.5) {
+          console.log(`${this.nome} encontrou um inimigo!`);
+          this.vida -= 1;
+          console.log(`Você perdeu 1 coração!`);
+      } else {
+          console.log(`${this.nome} encontrou uma poção!`);
+          this.recursos.poções += 1;
+          console.log(`Você ganhou uma poção!`);
+      }
+  }
 
-## Como Jogar
-1. Abra o console do navegador.
-2. Execute o comando `start()` para iniciar o jogo.
-3. A cada rodada, observe as mudanças nas características do personagem e siga as instruções no console para continuar jogando.
+  usarPocao() {
+      if (this.recursos.poções > 0) {
+          this.vida += 1;
+          this.recursos.poções -= 1;
+          console.log(`Você usou uma poção e ganhou 1 coração!`);
+      } else {
+          console.log(`Você não tem poções disponíveis!`);
+      }
+  }
 
-## Autores
-- Seu Nome Completo
+  estaVivo() {
+      return this.vida > 0;
+  }
+}
+
+function start() {
+  const personagem = new Personagem("Aventurinha");
+  let rodada = 1;
+
+  console.log("Iniciando o jogo...");
+
+  while (personagem.estaVivo()) {
+      console.log(`\nRodada ${rodada}`);
+      personagem.mostrarStatus();
+
+      const acao = prompt("Escolha uma ação: 1) Enfrentar desafio 2) Usar poção (digite 1 ou 2): ");
+
+      if (acao === '1') {
+          personagem.enfrentarDesafio();
+      } else if (acao === '2') {
+          personagem.usarPocao();
+      } else {
+          console.log("Ação inválida. Tente novamente.");
+      }
+
+      rodada++;
+  }
+
+  console.log(`${personagem.nome} foi derrotado! Fim do jogo.`);
+}
+
+// Chama a função start para iniciar o jogo
+start();

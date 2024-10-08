@@ -1,64 +1,84 @@
-// Variáveis iniciais
-let vida = 100;
-let forca = 50;
-let recursos = 30;
+// Definir o estado inicial do personagem
+let personagem = {
+  vida: 100,
+  forca: 50,
+  recurso: 20
+};
 
+// Função para exibir o status do personagem
 function mostrarStatus() {
-  console.log(`Vida: ${vida}, Força: ${forca}, Recursos: ${recursos}`);
+  console.log(`
+    Vida: ${personagem.vida}
+    Força: ${personagem.forca}
+    Recurso: ${personagem.recurso}
+  `);
 }
 
-function enfrentarDesafio() {
-  const desafio = Math.floor(Math.random() * 3); // 0: Vida, 1: Força, 2: Recursos
+// Função para realizar uma rodada do jogo
+function jogarRodada() {
+  console.clear();  // Limpa o console a cada rodada
+  console.log("Nova Rodada!");
 
-  switch (desafio) {
+  // Exibe o status atual do personagem
+  mostrarStatus();
+
+  // Geração de evento aleatório
+  let evento = Math.floor(Math.random() * 3);
+
+  switch (evento) {
     case 0:
-      const dano = Math.floor(Math.random() * 20) + 5; // Dano entre 5 e 25
-      console.log(`Você enfrentou um desafio que reduziu sua Vida em ${dano}!`);
-      vida -= dano;
+      // O personagem encontra um inimigo
+      let dano = Math.floor(Math.random() * 30);
+      console.log(`Você encontrou um inimigo! O inimigo causou ${dano} de dano.`);
+      personagem.vida -= dano;
       break;
     case 1:
-      const perdaForca = Math.floor(Math.random() * 10) + 3; // Perda de Força entre 3 e 12
-      console.log(`Você enfrentou um desafio que reduziu sua Força em ${perdaForca}!`);
-      forca -= perdaForca;
+      // O personagem encontra um item ou recurso
+      let recursoGanho = Math.floor(Math.random() * 20);
+      console.log(`Você encontrou um recurso! Você ganhou ${recursoGanho} de recurso.`);
+      personagem.recurso += recursoGanho;
       break;
     case 2:
-      const perdaRecursos = Math.floor(Math.random() * 15) + 5; // Perda de Recursos entre 5 e 20
-      console.log(`Você enfrentou um desafio que reduziu seus Recursos em ${perdaRecursos}!`);
-      recursos -= perdaRecursos;
+      // O personagem encontra um aliado
+      let cura = Math.floor(Math.random() * 15);
+      console.log(`Você encontrou um aliado! Você foi curado em ${cura} de vida.`);
+      personagem.vida += cura;
+      break;
+    default:
+      console.log("Nada aconteceu.");
       break;
   }
 
-  // Exibe o status após o desafio
-  mostrarStatus();
+  // Checar se o personagem morreu
+  if (personagem.vida <= 0) {
+    console.log("Você morreu! Fim de jogo.");
+    return false;
+  }
+
+  return true;
 }
 
-function iniciarRodada() {
-  if (vida <= 0) {
-    console.log("Você morreu! Fim do jogo.");
-    return;
-  }
+// Função principal para iniciar o jogo
+function start() {
+  console.log("O jogo começou!");
+  let rodadas = 0;
 
-  if (forca <= 0 || recursos <= 0) {
-    console.log("Você não tem força ou recursos suficientes para continuar. Fim do jogo.");
-    return;
-  }
-
-  console.log("Nova rodada!");
-  enfrentarDesafio();
-
-  // Condição para continuar ou finalizar o jogo
-  if (vida > 0) {
-    const continuar = prompt("Você quer continuar? (Sim/Não)").toLowerCase();
-    if (continuar === "sim") {
-      iniciarRodada();
-    } else {
-      console.log("Você decidiu abandonar a jornada. Fim do jogo.");
+  // O jogador deve sobreviver por um número determinado de rodadas (10)
+  while (personagem.vida > 0 && rodadas < 10) {
+    rodadas++;
+    if (!jogarRodada()) {
+      break;
     }
   }
+
+  // Verificar se o jogador venceu ou perdeu
+  if (personagem.vida > 0) {
+    console.log("Você sobreviveu a todas as rodadas! Você venceu!");
+  }
+  else {
+    console.log("Fim do jogo! Você morreu.");
+  }
 }
 
-function start() {
-  console.log("Jogo iniciado! Prepare-se para a primeira rodada.");
-  mostrarStatus();
-  iniciarRodada();
-}
+// Chama a função start para iniciar o jogo
+start();
